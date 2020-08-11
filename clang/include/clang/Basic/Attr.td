@@ -527,6 +527,20 @@ class TypeAttr : Attr;
 /// A stmt attribute is not processed on a declaration or a type.
 class StmtAttr : Attr;
 
+/// An undervisor-specific attribute. Note that we inherit from StmtAttr, not
+/// Attr, since we want to attach metadata to specific statements in the
+/// source code (Note that clang treats `Expr`, which we are really trying to
+/// target, as a subclass of `Stmt`). While the undervisor also has to keep
+/// track of type information, we take care of that functionality using other
+/// information channels.
+/// Since all undervisor attributes are implicit (i.e. products of the source
+/// code, rather than application-defined directives), none of them have
+/// spellings.
+class UndervisorAttr : StmtAttr {
+  let Spellings = [];
+  let Documentation = [Undocumented];
+}
+
 /// An inheritable attribute is inherited by later redeclarations.
 class InheritableAttr : Attr {
   // Set to true if this attribute can be duplicated on a subject when inheriting
@@ -3512,4 +3526,24 @@ def ReleaseHandle : InheritableParamAttr {
   let Args = [StringArgument<"HandleType">];
   let Subjects = SubjectList<[ParmVar]>;
   let Documentation = [ReleaseHandleDocs];
+}
+
+//
+// Undervisor-specific attributes
+//
+
+def UndervisorStaticCast : UndervisorAttr {
+  let Args = [ExprArgument<"SourceExpression">, TypeArgument<"DestinationType">];
+
+  // According to https://clang.llvm.org/docs/InternalsManual.html#subjects
+  // apparently "attributes pertain to one or more Decl subjects", which is
+  // why using the `CXXStaticCastExpr` keeps trying to find a
+  // `CXXStaticCastExprDecl` object. I tried a couple of incantations using
+  // both a plain `SubjectList` and a `SubsetSubject`, but it looks like
+  // using the `Subjects` field for a `StmtAttr` is just not supported. In
+  // fact, the other `StmtAttr` instances in this document all have their
+  // `Subjects` field either missing or commented out. We do the same.
+
+  // UNDERVISOR_TODO: make a PR for the fact that the documentation is
+  // misleading or otherwise incorrect.
 }

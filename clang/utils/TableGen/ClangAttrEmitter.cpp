@@ -2586,6 +2586,7 @@ static const AttrClassDescriptor AttrClassDescriptors[] = {
   { "ATTR", "Attr" },
   { "TYPE_ATTR", "TypeAttr" },
   { "STMT_ATTR", "StmtAttr" },
+  { "UNDERVISOR_ATTR", "UndervisorAttr" },
   { "INHERITABLE_ATTR", "InheritableAttr" },
   { "DECL_OR_TYPE_ATTR", "DeclOrTypeAttr" },
   { "INHERITABLE_PARAM_ATTR", "InheritableParamAttr" },

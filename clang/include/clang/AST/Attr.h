@@ -177,6 +177,22 @@ public:
   }
 };
 
+// Undervisor-specific attribute
+class UndervisorAttr : public Attr {
+protected:
+  UndervisorAttr(ASTContext &Context, const AttributeCommonInfo &CommonInfo,
+           attr::Kind AK, bool IsLateParsed)
+      : Attr(Context, CommonInfo, AK, IsLateParsed) {}
+
+public:
+  static bool classof(const Attr *A) {
+    return A->getKind() >= attr::FirstUndervisorAttr &&
+           A->getKind() <= attr::LastUndervisorAttr;
+  }
+};
+
+
+
 /// A parameter attribute which changes the argument-passing ABI rule
 /// for the parameter.
 class ParameterABIAttr : public InheritableParamAttr {
