@@ -318,16 +318,6 @@ static Attr *handleOpenCLUnrollHint(Sema &S, Stmt *St, const ParsedAttr &A,
   return OpenCLUnrollHintAttr::CreateImplicit(S.Context, UnrollFactor);
 }
 
-
-// Undervisor handlers here
-
-static Attr *handleUndervisorStaticCast(Sema &S, Stmt *St, const ParsedAttr &A,
-                                        SourceRange Range) {
-    // UNDERVISOR_TODO
-    return nullptr;
-}
-
-
 static Attr *ProcessStmtAttribute(Sema &S, Stmt *St, const ParsedAttr &A,
                                   SourceRange Range) {
   switch (A.getKind()) {
@@ -345,9 +335,6 @@ static Attr *ProcessStmtAttribute(Sema &S, Stmt *St, const ParsedAttr &A,
     return handleOpenCLUnrollHint(S, St, A, Range);
   case ParsedAttr::AT_Suppress:
     return handleSuppressAttr(S, St, A, Range);
-  // Undervisor cases start here
-  case ParsedAttr::AT_UndervisorStaticCast:
-    return handleUndervisorStaticCast(S, St, A, Range);
   default:
     // if we're here, then we parsed a known attribute, but didn't recognize
     // it as a statement attribute => it is declaration attribute
