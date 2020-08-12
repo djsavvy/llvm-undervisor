@@ -177,6 +177,7 @@ public:
   }
 };
 
+
 // Undervisor-specific attribute
 class UndervisorAttr : public Attr {
 protected:
@@ -190,7 +191,6 @@ public:
            A->getKind() <= attr::LastUndervisorAttr;
   }
 };
-
 
 
 /// A parameter attribute which changes the argument-passing ABI rule

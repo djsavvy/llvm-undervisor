@@ -535,10 +535,11 @@ class StmtAttr : Attr;
 /// information channels.
 /// Since all undervisor attributes are implicit (i.e. products of the source
 /// code, rather than application-defined directives), none of them have
-/// spellings.
+/// spellings or semantic handlers.
 class UndervisorAttr : StmtAttr {
   let Spellings = [];
   let Documentation = [Undocumented];
+  let SemaHandler = 0;
 }
 
 /// An inheritable attribute is inherited by later redeclarations.
