@@ -323,34 +323,11 @@ Sema::BuildCXXNamedCast(SourceLocation OpLoc, tok::TokenKind Kind,
       DiscardMisalignedMemberAddress(DestType.getTypePtr(), E);
     }
 
-    // Undervisor: we wrap the actual CXXStaticCastExpr in an AttributedStmt
-    // (which is the way in which attributes are attached to statements).
-    CastExpr *inner_static_cast = Op.complete(CXXStaticCastExpr::Create(Context, Op.ResultType,
+    return Op.complete(CXXStaticCastExpr::Create(Context, Op.ResultType,
                                    Op.ValueKind, Op.Kind, Op.SrcExpr.get(),
                                                  &Op.BasePath, DestTInfo,
                                                  OpLoc, Parens.getEnd(),
-                                                 AngleBrackets)).getAs<CastExpr>();
-
-    UndervisorStaticCastAttr *undervisor_attr = UndervisorStaticCastAttr::CreateImplicit(Context, Op.SrcExpr.get(), DestTInfo);
-
-    AttributedStmt *undervisor_wrapper = AttributedStmt::Create(Context, OpLoc, ArrayRef<const Attr *>(undervisor_attr), inner_static_cast);
-
-    // fprintf(stderr, "We got a static cast...\n\tFrom: %s\n\tTo: %s\n\tWrapper Node: %s\n\tWrapper->getExprStmt(): %s\n\n", Op.SrcExpr.get());
-
-    fprintf(stderr, "We got a static cast...\n");
-    fprintf(stderr, "\n\tFrom: ");
-    Op.SrcExpr.get()->dumpPretty(Context);
-    fprintf(stderr, "\n\tTo: %s", DestTInfo->getType().getAsString().c_str());
-    // DestTInfo->getType().dump();
-    fprintf(stderr, "\n\tWrapper Node: \n");
-    undervisor_wrapper->dump();
-    // undervisor_wrapper->dumpPretty(Context);
-    fprintf(stderr, "\n\tWrapper as ExprStmt: \n");
-    undervisor_wrapper->getExprStmt()->dump();
-    // undervisor_wrapper->getExprStmt()->dumpPretty(Context);
-    fprintf(stderr, "\n\n\n\n");
-
-    return undervisor_wrapper->getExprStmt();
+                                                 AngleBrackets));
   }
   }
 }
